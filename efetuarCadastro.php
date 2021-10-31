@@ -7,17 +7,18 @@ $username1 = $_POST['username12'];
 $email = $_POST['email2'];
 
 // Check if the values are in the correct way
-if(!preg_match("/^[a-zA-Z0-9]*$/", $username)){
-    echo "<b>Nome inválido!</b>\n";
+if(!preg_match("/^[a-zA-Z ]*$/",$username)){
+    echo "Nome inválido<br>";
     echo "<script>setTimeout(\"location.href = 'login.php';\",3000);</script>";
     exit();
 }
+
 if(!preg_match("/^[a-zA-Z0-9]*$/", $password)){
     echo "<b>Senha inválida!</b>\n";
     echo "<script>setTimeout(\"location.href = 'login.php';\",3000);</script>";
     exit();
 }
-if(!preg_match("/^[a-zA-Z0-9]*$/", $username1)){
+if(!preg_match("/^[a-zA-Z0-9]*$/", $username)){
     echo "<b>Login inválido!</b>\n";
     echo "<script>setTimeout(\"location.href = 'login.php';\",3000);</script>";
     exit();
@@ -30,21 +31,21 @@ if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
 
 $db = new PDO('mysql:host=localhost;dbname=agenda', 'root', '');
 
-// Check if username or email is already in use
-$stmt = $db->prepare("SELECT * FROM usuarios WHERE username = :username OR email = :email");
-$query->bindParam(':username1', $username);
-$query->bindParam(':email', $email);
-$query->execute();
-$rows = $query->fetchAll(PDO::FETCH_ASSOC);
-if ($rows) {
+// Try to get the user from the database if already exists
+$stmt = $db->prepare("SELECT * FROM usuario WHERE UserLogin = :username");
+$stmt->bindParam(':username', $username);
+$stmt->execute();
+$result = $stmt->fetchAll();
+
+if ($result) {
     echo "Usuário já existe! Iremos te redirecionar ao início.";
     echo "<script>setTimeout(\"location.href = 'index.php';\",3000);</script>";
 } else {
     // Add user to the database
     $query = $db->prepare("INSERT INTO usuario (UserNome, UserEmail, UserLogin, UserSenha) VALUES (:username, :email, :username1, :password)");
-    $query->bindParam(':username', $username);
+    $query->bindParam(':username', $username1);
     $query->bindParam(':password', $password);
-    $query->bindParam(':username1', $username1);
+    $query->bindParam(':username1', $username);
     $query->bindParam(':email', $email);
     $query->execute();
 

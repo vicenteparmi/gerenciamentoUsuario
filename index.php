@@ -50,7 +50,7 @@
                 $contacts = $stmt->fetchAll();
 
                 // If there are no contacts, show a message as a card
-                if ($contacts == null) {
+                if ($contacts == null && $_SESSION['user'] != null) {
                     echo '<div class="mdl-card mdl-shadow--2dp">
                             <div class="mdl-card__title">
                                 <h2 class="mdl-card__title-text">Nenhum contato cadastrado</h2>
@@ -64,7 +64,25 @@
                                 </a>
                             </div>
                         </div>';
-                } else {
+                } else if ($_SESSION['user'] == null) {
+                    // Display a message if the user is not logged in
+                    echo '<div class="mdl-card mdl-shadow--2dp">
+                            <div class="mdl-card__title">
+                                <h2 class="mdl-card__title-text">Você não está logado</h2>
+                            </div>
+                            <div class="mdl-card__supporting-text">
+                                <p>Você precisa estar logado para acessar essa página. Clique no botão abaixo para fazer login.</p>
+                            </div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="login.php">
+                                    Login
+                                </a>
+                            </div>
+                        </div>';
+                } else
+                
+                
+                {
                     echo '<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                             <thead>
                                 <tr>
@@ -110,8 +128,15 @@
 
                         echo '</td>';
                         echo '<td class="mdl-data-table__cell--non-numeric">';
-                        echo '<a href="edit.php?id=' . $contact['ContatoID'] . '">Editar</a>';
-                        echo '<a href="delete.php?id=' . $contact['ContatoID'] . '">Excluir</a>';
+
+                        // Material edit and delete buttons
+                        echo '<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="edit.php?id=' . $contact['ContatoID'] . '">
+                                Editar
+                            </a>
+                            <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="delete.php?id=' . $contact['ContatoID'] . '">
+                                Excluir
+                            </a>';
+                        echo '</td>';
                         echo '</td>';
                         echo '</tr>';   
                     

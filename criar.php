@@ -21,9 +21,10 @@ if (isset($_POST['nome']) && isset($_POST['email']) && isset($_POST['telefone'])
     $pdo = new PDO('mysql:host=localhost;dbname=agenda', 'root', '');
 
     // Check if the contact already exists
-    $sql = "SELECT * FROM contato WHERE ContatoNome = :nome";
+    $sql = "SELECT * FROM contato WHERE ContatoNome = :nome AND UserID = :id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':id', $_SESSION['user']);
     $stmt->execute();
     $result = $stmt->fetchAll();
 

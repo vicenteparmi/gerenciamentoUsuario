@@ -9,11 +9,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $db = new PDO('mysql:host=localhost;dbname=agenda', 'root', '');
-    $query = $db->prepare("SELECT * FROM usuario WHERE UserNome = :username AND UserSenha = :password");
+    $query = $db->prepare("SELECT * FROM usuario WHERE UserLogin = :username AND UserSenha = :password");
     $query->bindParam(':username', $username);
     $query->bindParam(':password', $password);
     $query->execute();
     $user = $query->fetch();
+
     if ($user) {
         // Get user id from database
         $query = $db->prepare("SELECT * FROM usuario WHERE UserLogin = :username");
