@@ -24,6 +24,13 @@
     .mdl-card__actions {
         text-align: center;
     }
+
+    /* Center card on page*/
+    .mdl-card {
+        margin: auto;
+        margin-top: 5vh;
+        width: 90%;
+    }
 </style>
 
 <body>
@@ -52,7 +59,7 @@
                                 <p>Você ainda não possui nenhum contato cadastrado. Clique no botão abaixo para adicionar um novo contato.</p>
                             </div>
                             <div class="mdl-card__actions mdl-card--border">
-                                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="newContact.php">
+                                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="criar.php">
                                     Adicionar Contato
                                 </a>
                             </div>
