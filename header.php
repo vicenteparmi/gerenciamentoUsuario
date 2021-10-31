@@ -8,7 +8,12 @@
         <nav class="mdl-navigation mdl-layout--large-screen-only">
             <?php
             // Chack if user is logged in
-            if (isset($_SESSION['user_id'])) {
+            // Start session if not already started
+            if (session_id() == '') {
+                session_start();
+            };
+            // Check if user is logged in
+            if (isset($_SESSION['user'])) {
                 echo '<a class="mdl-navigation__link" href="logout.php">Logout</a>';
             } else {
                 echo '<a class="mdl-navigation__link" href="login.php">Entrar ou Cadastrar</a>';

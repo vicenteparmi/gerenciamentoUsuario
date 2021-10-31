@@ -1,25 +1,11 @@
 <?php
-
-// Add user to the database
-if (isset($_POST['username1']) && isset($_POST['password']) && isset($_POST['username']) && isset($_POST['email'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $username1 = $_POST['username1'];
-    $email = $_POST['email'];
-    $db = new PDO('mysql:host=localhost;dbname=agenda', 'root', '');
-    // Insert user into database
-    $query = $db->prepare('INSERT INTO usuario (UserNome, UserEmail, UserLogin, UserSenha) VALUES (:nome, :email, :login, :senha)');
-    $query->bindParam(':nome', $username);
-    $query->bindParam(':email', $email);
-    $query->bindParam(':login', $username1);
-    $query->bindParam(':senha', $password);
-    $query->execute();
-    header('Location: index.php');
-}
-
+// Start session if not already started
+if(session_id() == '') {
+    session_start();
+};
 
 // Check user credentials in database and redirect to home page if successful
-if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['newuser'])) {
+if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $db = new PDO('mysql:host=localhost;dbname=agenda', 'root', '');
@@ -29,8 +15,13 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['newu
     $query->execute();
     $user = $query->fetch();
     if ($user) {
-        $_SESSION['user'] = $user;
-        header('Location: ../index.php');
+        // Get user id from database
+        $query = $db->prepare("SELECT * FROM usuario WHERE UserLogin = :username");
+        $query->bindParam(':username', $username);
+        $query->execute();
+        $user = $query->fetch();
+        $_SESSION['user'] = $user['UserID'];
+        header('Location: index.php');
         echo "Login efetuado com sucesso!";
     } else {
         echo "<script type='text/javascript'>alert('Usuário não encontrado. Cetifique-se de que digitou corretamente as informações ou crie um novo usuário.');</script>";
@@ -108,22 +99,22 @@ if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['newu
                                 <h2 class="mdl-card__title-text">Cadastre-se</h2>
                             </div>
                             <div class="mdl-card__supporting-text">
-                                <form action="login.php" method="post">
+                                <form action="efetuarCadastro.php" method="post">
                                     <div class="mdl-textfield mdl-js-textfield">
-                                        <input class="mdl-textfield__input" type="text" id="username" name="username" />
-                                        <label class="mdl-textfield__label" for="username1">Nome Completo</label>
+                                        <input class="mdl-textfield__input" type="text" id="username12" name="username12" />
+                                        <label class="mdl-textfield__label" for="username12">Nome Completo</label>
                                     </div>
                                     <div class="mdl-textfield mdl-js-textfield">
-                                        <input class="mdl-textfield__input" type="text" id="username" name="username" />
-                                        <label class="mdl-textfield__label" for="email">Email</label>
+                                        <input class="mdl-textfield__input" type="text" id="email2" name="email2" />
+                                        <label class="mdl-textfield__label" for="email2">Email</label>
                                     </div>
                                     <div class="mdl-textfield mdl-js-textfield">
-                                        <input class="mdl-textfield__input" type="text" id="username" name="username" />
-                                        <label class="mdl-textfield__label" for="username">Login</label>
+                                        <input class="mdl-textfield__input" type="text" id="username2" name="username2" />
+                                        <label class="mdl-textfield__label" for="username2">Login</label>
                                     </div>
                                     <div class="mdl-textfield mdl-js-textfield">
-                                        <input class="mdl-textfield__input" type="password" id="password" name="password" />
-                                        <label class="mdl-textfield__label" for="password">Senha</label>
+                                        <input class="mdl-textfield__input" type="password" id="password2" name="password2" />
+                                        <label class="mdl-textfield__label" for="password2">Senha</label>
                                     </div>
                                     <div class="mdl-card__actions mdl-card--border">
                                         <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit">Cadastrar</button>
